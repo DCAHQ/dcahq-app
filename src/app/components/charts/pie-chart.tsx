@@ -8,21 +8,10 @@ import { prettyBalance } from "../../common/utils/pretty"
 
 export interface PieChartProps {
   data: ValuePieChartData[]
-  name: string
-  // height: number
-  // width: number
-  // xName: string
-  // yName: string
-  // errorHandler?: (msg: string) => void
+  name: "Source" | "Target"
 }
 
-export default function PieChart({
-  data,
-  name
-  // xName,
-  // yName,
-  // errorHandler
-}: PieChartProps) {
+export default function PieChart({ data, name }: PieChartProps) {
   const [active, setActive] = useState<ValuePieChartData | null>(null)
   const width = 250
   const half = width / 2

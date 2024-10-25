@@ -60,7 +60,7 @@ const NoPositionsFound = () => {
             >
               - Optimized Execution:
             </span>{" "}
-            Breaks large swaps into smaller ones, helping you achieve better
+            Break large swaps into smaller ones, helping you achieve better
             overall pricing.
           </li>
           <li

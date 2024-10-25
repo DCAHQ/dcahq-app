@@ -65,7 +65,7 @@ const PositionStatsContainer = ({
       const sourceDetails = tokenMap[sourceToken]
       const source = sourceDetails.displayName
       const targetDetails = tokenMap[targetToken]
-      const target = sourceDetails.displayName
+      const target = targetDetails.displayName
 
       const sourceAmountInDec =
         Number(data.sourceAmountLeft) / 10 ** sourceDetails.decimal
