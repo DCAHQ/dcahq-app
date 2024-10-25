@@ -44,6 +44,7 @@ export const alex = "SP102V8P0F7JX67ARQ77WEA3D3CFB5XW39REDT0AM"
 // cant add seconds values to the enums since i want to follow the contract as close as possible, will need its own map
 export enum Intervals {
   hours2,
+  hours6,
   hours12,
   daily,
   weekly
@@ -51,6 +52,7 @@ export enum Intervals {
 
 export const intervalSeconds = {
   [Intervals.hours2]: 2 * 60 * 60,
+  [Intervals.hours6]: 6 * 60 * 60,
   [Intervals.hours12]: 12 * 60 * 60,
   [Intervals.daily]: 24 * 60 * 60,
   [Intervals.weekly]: 7 * 24 * 60 * 60
