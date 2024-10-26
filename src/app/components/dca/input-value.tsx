@@ -3,23 +3,34 @@ import { isEmptyOrNumberInput } from "../../common/utils/helpers"
 import { css } from "@/styled-system/css"
 import { VStack } from "@/styled-system/jsx"
 
-const InputAmount = ({
-  amount,
-  setAmount,
+const InputValue = ({
+  value,
+  setValue,
   name,
   center
 }: {
-  amount: string
-  setAmount: (amount: string) => void
+  value: string
+  setValue?: (value: string) => void
   name: string
   center?: boolean
 }) => {
-  const [query, setQuery] = useState("")
+  const isReadOnly = !setValue
+  const [query, setQuery] = useState(value)
 
   useEffect(() => {
-    const timeOutId = setTimeout(() => setAmount(query), 500)
-    return () => clearTimeout(timeOutId)
-  }, [query])
+    if (isReadOnly) {
+      setQuery(value) // Sync the query with value when in read-only mode
+    }
+  }, [value, isReadOnly])
+
+  useEffect(() => {
+    if (!isReadOnly) {
+      const timeOutId = setTimeout(() => {
+        if (setValue) setValue(query)
+      }, 500)
+      return () => clearTimeout(timeOutId)
+    }
+  }, [query, isReadOnly])
 
   return (
     <VStack
@@ -29,9 +40,9 @@ const InputAmount = ({
       })}
     >
       <label
-        htmlFor="total-amount"
+        htmlFor="total-value"
         className={css({
-          color: amount ? "white" : "lightcyan",
+          color: value ? "white" : "lightcyan",
           alignSelf: center ? "center" : ["center", "center", "flex-end"],
           fontWeight: "light",
           fontSize: "xl",
@@ -43,30 +54,31 @@ const InputAmount = ({
       <input
         value={query}
         onChange={e => {
-          const value = e.target.value
-          if (isEmptyOrNumberInput(value)) {
-            setQuery(value)
+          const inputValue = e.target.value
+          if (!isReadOnly && isEmptyOrNumberInput(inputValue)) {
+            setQuery(inputValue)
           }
         }}
         placeholder={"0"}
-        name="total-amount"
+        name="total-value"
         type="text"
         inputMode="decimal"
         className={css({
           marginRight: "0.5rem",
           width: "100%",
-          color: amount ? "white" : "lightcyan",
+          color: value ? "white" : "lightcyan",
           fontWeight: "light",
           fontSize: "xl",
           textAlign: center ? "center" : ["center", "center", "right"],
           bg: "transparent",
           border: "none",
           outline: "none",
-          borderBottom: ["", "", "1px solid gray"]
+          borderBottom: { base: "1px solid gray", _readOnly: "none" }
         })}
+        readOnly={isReadOnly}
       />
     </VStack>
   )
 }
 
-export default InputAmount
+export default InputValue

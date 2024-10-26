@@ -35,7 +35,7 @@ import {
 import Dropdown from "../components/dropdown"
 import { withdraw } from "../common/functionCalls/dca/withdraw"
 import Modal from "../components/modal"
-import InputAmount from "../components/dca/input-amount"
+import InputValue from "../components/dca/input-value"
 import { addToPosition } from "../common/functionCalls/dca/addToPosition"
 import { reducePosition } from "../common/functionCalls/dca/reducePosition"
 
@@ -209,9 +209,9 @@ const PositionStats = ({
         alignItems={"center"}
         overflow={"hidden"}
       >
-        <InputAmount
-          amount={modalInputAmount}
-          setAmount={setModalInputAmount}
+        <InputValue
+          value={modalInputAmount}
+          setValue={setModalInputAmount}
           name="Amount"
           center={true}
         />

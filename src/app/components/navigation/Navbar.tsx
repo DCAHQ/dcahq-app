@@ -30,7 +30,7 @@ const Navbar = () => {
           }
         })}
       >
-        <Flex gap={[0, 3]} alignItems="center">
+        <Flex gap={[0, 3]} ml={[1, 0]} alignItems="center">
           <Image
             className={css({ display: ["none", "block"] })}
             src="/favicon.ico"
@@ -46,9 +46,8 @@ const Navbar = () => {
         className={css({
           display: "flex",
           listStyle: "none",
-          gap: [0, "1rem"],
-          alignItems: "center",
-          margin: 0
+          gap: [0, 1],
+          alignItems: "center"
         })}
       >
         <li>
@@ -76,7 +75,7 @@ const Navbar = () => {
             className={css({
               color: "white",
               display: "flex",
-              padding: ["0.02rem", "0.25rem 1rem"],
+              padding: ["0.4rem", "0.25rem 1rem"],
               flexDirection: ["column", "row"],
               border: "2px solid transparent",
               transition: "all 0.3s ease",
@@ -89,7 +88,9 @@ const Navbar = () => {
             })}
           >
             <span>Strategies</span>
-            <Soon />
+            <div className={css({ display: ["none", "block"] })}>
+              <Soon />
+            </div>
           </Link>
         </li>
         <li>

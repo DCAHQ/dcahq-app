@@ -13,7 +13,7 @@ export async function getBalance(
   address: string,
   network: StacksMainnet
 ) {
-  if (isStxOrStxWrapper(token)) token = Tokens.ASTX
+  // if (isStxOrStxWrapper(token)) token = Tokens.ASTX
 
   const functionArgs = [principalCV(address)]
   const contract = tokenMap[token].contract
@@ -29,5 +29,6 @@ export async function getBalance(
   // @ts-ignore
   const balanceCV = response.value
   const balance = cvToValue(balanceCV)
+  console.log({ balance })
   return balance
 }

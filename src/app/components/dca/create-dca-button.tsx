@@ -22,7 +22,8 @@ const CreateDcaButton = ({
   minPrice,
   maxPrice,
   userAddress,
-  resetHandlerPostDca
+  resetHandlerPostDca,
+  errorState = ""
 }: {
   network: StacksMainnet | null
   sourceToken: Tokens
@@ -33,26 +34,35 @@ const CreateDcaButton = ({
   minPrice: string
   maxPrice: string
   userAddress: string
+  errorState?: string
   resetHandlerPostDca?: () => void
 }) => {
   const [txID, setTxId] = useState("")
   useUser()
+
   if (!network) return <ConnectWallet variant="createDcaButton" />
+
   return (
     <>
       <button
         className={css({
-          background: "linear-gradient(to right, red 0%, orange 100%)",
-          cursor: "pointer",
+          background: errorState
+            ? "linear-gradient(to right, gray 0%, darkgray 100%)"
+            : "linear-gradient(to right, red 0%, orange 100%)",
+          cursor: errorState ? "not-allowed" : "pointer",
           color: "white",
           padding: "10px 20px",
           border: "none",
           borderRadius: "5px",
+          opacity: errorState ? 0.6 : 1, // Dimming effect when errorState is true
           _hover: {
-            background: "linear-gradient(to right, darkred 0%, darkorange 100%)"
+            background: errorState
+              ? "linear-gradient(to right, gray 0%, darkgray 100%)"
+              : "linear-gradient(to right, darkred 0%, darkorange 100%)"
           }
         })}
         onClick={async () => {
+          if (errorState) return // Prevent the function call when in error state
           try {
             await createDCA(
               sourceToken,
@@ -71,8 +81,9 @@ const CreateDcaButton = ({
             handleFunctionCallError(error)
           }
         }}
+        disabled={!!errorState}
       >
-        DCA
+        {errorState ? errorState : "DCA"}
       </button>
       <ToastContainer />
     </>

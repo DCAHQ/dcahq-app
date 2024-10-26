@@ -8,8 +8,9 @@ export default function Home() {
     <VStack className={css({ pt: "10px" })}>
       <VStack justifyContent="center" alignItems="center" maxWidth={"90%"}>
         <HeaderBanner>
-          For everyone who has bought a token only to see its value plummet a
-          few days later.
+          The most profitable strategy to buy memecoins BTC STX & Runes
+          {/* For everyone who has bought a token only to see its value plummet a
+          few days later. */}
         </HeaderBanner>
         <HeaderBanner>
           Non-Custodial, Emotion-Free Investing on Auto-Pilot.

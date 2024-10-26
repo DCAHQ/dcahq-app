@@ -1,7 +1,6 @@
 import { css } from "@/styled-system/css"
 import { VStack } from "@/styled-system/jsx"
 import React from "react"
-import ConnectWallet from "../components/navigation/ConnectWallet"
 
 const NoPositionsFound = () => {
   return (
@@ -34,7 +33,7 @@ const NoPositionsFound = () => {
             className={css({
               fontSize: ["md", "lg"],
               marginBottom: "0.5rem",
-              color: "#fff" // Optional: Adjust text color for contrast
+              color: "#fff"
             })}
           >
             <span
@@ -50,7 +49,7 @@ const NoPositionsFound = () => {
             className={css({
               fontSize: ["md", "lg"],
               marginBottom: "0.5rem",
-              color: "#fff" // Optional: Adjust text color for contrast
+              color: "#fff"
             })}
           >
             <span
@@ -67,7 +66,7 @@ const NoPositionsFound = () => {
             className={css({
               fontSize: ["md", "lg"],
               marginBottom: "0.5rem",
-              color: "#fff" // Optional: Adjust text color for contrast
+              color: "#fff"
             })}
           >
             <span
@@ -84,7 +83,7 @@ const NoPositionsFound = () => {
             className={css({
               fontSize: ["md", "lg"],
               marginBottom: "0.5rem",
-              color: "#fff" // Optional: Adjust text color for contrast
+              color: "#fff"
             })}
           >
             <span

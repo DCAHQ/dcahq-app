@@ -21,6 +21,7 @@ import { StacksMainnet } from "@stacks/network"
 import Customize from "./customize"
 import { getPrice as getPriceAlex } from "../../common/functionCalls/alex/getPrice"
 
+// TODO add price source vs target, "Estimated duration" & validation errors (min dca amount, insufficient balance etc)
 const DcaCard = () => {
   const { userSession } = useUser()
   const [user, setUser] = useState<UserData | null>(null)
@@ -39,6 +40,7 @@ const DcaCard = () => {
   const [network] = useState<StacksMainnet>(new StacksMainnet())
   const [targetPrice, setTargetPrice] = useState(0)
   const [stxPrice, setStxPrice] = useState(0)
+  const [errorState, setErrorState] = useState("")
 
   const resetHandlerPostDca = () => {
     setMinPrice("0")
@@ -104,6 +106,8 @@ const DcaCard = () => {
             setSourceValueUsd={setSourceValueUsd}
             setTargetToken={setTargetToken}
             setTargetTokens={setTargetTokensOptions}
+            errorState={errorState}
+            setErrorState={setErrorState}
           />
           <Flex width={"100%"} position={"relative"}>
             <HStack pb="0.5rem" position={"absolute"} bottom="0">
@@ -128,7 +132,7 @@ const DcaCard = () => {
           />
           <Flex my={"1rem"}>
             <IntervalButton
-              label="Buy Every:"
+              label="Frequency:"
               selectedInterval={selectedInterval}
               setSelectedInterval={setSelectedInterval}
             />
@@ -144,6 +148,7 @@ const DcaCard = () => {
             maxPrice={maxPrice}
             userAddress={user?.profile.stxAddress.mainnet}
             resetHandlerPostDca={resetHandlerPostDca}
+            errorState={errorState}
           />
           {!!user && !!sourceValueUsd && (
             <Customize

@@ -146,6 +146,7 @@ export const tokenMap: {
     assetName: string
     image: string
     displayName: string
+    minDcaThreshold?: number
   }
 } = {
   [Tokens.STX]: {
@@ -153,7 +154,8 @@ export const tokenMap: {
     image: "/stx.svg",
     decimal: 6,
     assetName: "stx",
-    displayName: "STX"
+    displayName: "STX",
+    minDcaThreshold: 2 * 10 ** 6
   },
   //  ALEX
   [Tokens.ASTX]: {
@@ -161,14 +163,16 @@ export const tokenMap: {
     image: "/stx.svg",
     decimal: 8,
     assetName: "wstx",
-    displayName: "STX"
+    displayName: "STX",
+    minDcaThreshold: 2 * 10 ** 8
   },
   [Tokens.AUSDT]: {
     contract: alexUsdtContract,
     decimal: 8,
     image: "/susdt.svg",
     assetName: "bridged-usdt",
-    displayName: "USDT"
+    displayName: "USDT",
+    minDcaThreshold: 5 * 10 ** 8
   },
   [Tokens.AWWELSH]: {
     contract: alexWelshContract,
@@ -183,14 +187,16 @@ export const tokenMap: {
     image: "/stx.svg",
     decimal: velarWstxDecimal,
     assetName: "wstx",
-    displayName: "STX"
+    displayName: "STX",
+    minDcaThreshold: 2 * 10 ** 6
   },
   [Tokens.VAEUSDC]: {
     contract: velarAeusdcContract,
     image: "https://s2.coinmarketcap.com/static/img/coins/64x64/18852.png",
     decimal: velarWelshDecimal,
     assetName: "aeUSDC",
-    displayName: "aeUSDC"
+    displayName: "aeUSDC",
+    minDcaThreshold: 5 * 10 ** 6
   },
   [Tokens.VWELSH]: {
     contract: welshContract,

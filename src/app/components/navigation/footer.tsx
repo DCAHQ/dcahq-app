@@ -24,7 +24,7 @@ const Footer = () => {
           borderRadius="md"
           onClick={() =>
             window.open(
-              `https://github.com/cbadawi/dcahq-app/issues/new`,
+              `https://github.com/DCAHQ/dcahq-app/issues/new`,
               "_blank"
             )
           }

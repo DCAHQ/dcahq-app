@@ -5,6 +5,7 @@ import { Flex, Box, VStack, HStack } from "@/styled-system/jsx"
 import { UserData } from "@stacks/connect"
 import { getBalance } from "@/src/app/common/functionCalls/getBalance"
 import {
+  contractMap,
   sourceTokens,
   targetTokens,
   tokenMap,
@@ -12,7 +13,7 @@ import {
 } from "@/src/app/common/utils/helpers"
 import { prettyBalance, prettyPrice } from "../../common/utils/pretty"
 import { StacksMainnet } from "@stacks/network"
-import InputAmount from "./input-amount"
+import InputValue from "./input-value"
 import TokenSelector from "../token-selector"
 import { getPriceUsd } from "../../common/functionCalls/getPrice"
 import {
@@ -34,6 +35,8 @@ interface SourceComponentProps {
   setPurchaseAmount: (amount: string) => void
   user: UserData | null
   network: StacksMainnet | null
+  errorState: string
+  setErrorState: (e: string) => void
 }
 
 const SourceCard = ({
@@ -49,7 +52,9 @@ const SourceCard = ({
   network,
   setTargetTokens,
   setTargetToken,
-  stxPrice
+  stxPrice,
+  errorState,
+  setErrorState
 }: SourceComponentProps) => {
   const [balance, setBalance] = useState<BigInt>(BigInt(0))
 
@@ -64,19 +69,32 @@ const SourceCard = ({
       )
       if (!active) return
       setBalance(balance)
+
+      // Compare balance with totalAmount and set error state
+      const totalAmountAsBigInt = BigInt(
+        Number(totalAmount) * 10 ** tokenMap[sourceToken].decimal
+      )
+      if (balance < totalAmountAsBigInt) {
+        setErrorState("Insufficient balance")
+      } else {
+        setErrorState("")
+      }
+
       console.log("source-card fetchBalance", {
         balance,
         sourceToken
       })
     }
+
     fetchBalance()
     const newTargetTokens = getAvailableTargetTokens(targetTokens, sourceToken)
     setTargetToken(newTargetTokens[0])
     setTargetTokens(newTargetTokens)
+
     return () => {
       active = false
     }
-  }, [sourceToken.valueOf(), user])
+  }, [sourceToken.valueOf(), user, totalAmount])
 
   useEffect(() => {
     if (!totalAmount) return
@@ -100,6 +118,25 @@ const SourceCard = ({
     }
   }, [sourceToken.valueOf(), totalAmount, stxPrice])
 
+  const setPurchaseAmountWrapper = (amount: string) => {
+    const purchaseAmountAsBigInt = BigInt(
+      Number(totalAmount) * 10 ** tokenMap[sourceToken].decimal
+    )
+    const minDcaThreshold = tokenMap[sourceToken].minDcaThreshold
+    const isSourceAmountLow =
+      minDcaThreshold &&
+      purchaseAmountAsBigInt < minDcaThreshold &&
+      totalAmount &&
+      purchaseAmount
+    if (isSourceAmountLow) {
+      setErrorState("Purchase amount too low")
+    } else {
+      setErrorState("")
+    }
+
+    setPurchaseAmount(amount)
+  }
+
   const sourceDetails = tokenMap[sourceToken]
 
   return (
@@ -108,7 +145,7 @@ const SourceCard = ({
       bg="#0e0e13"
       borderWidth="1px"
       borderRadius="lg"
-      borderColor={"grey"}
+      borderColor={errorState ? "red" : "grey"}
     >
       <VStack width="100%">
         <Flex
@@ -126,14 +163,14 @@ const SourceCard = ({
               imagePath={sourceDetails.image}
             />
           </Box>
-          <InputAmount
-            amount={purchaseAmount}
-            setAmount={setPurchaseAmount}
+          <InputValue
+            value={purchaseAmount}
+            setValue={setPurchaseAmountWrapper}
             name="Amount per Buy"
           />
-          <InputAmount
-            amount={totalAmount}
-            setAmount={setTotalAmount}
+          <InputValue
+            value={totalAmount}
+            setValue={setTotalAmount}
             name="Total Amount"
           />
         </Flex>

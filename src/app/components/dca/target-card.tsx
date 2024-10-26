@@ -1,11 +1,11 @@
 import React, { memo, useEffect, useState } from "react"
 import { Box, Flex, VStack } from "@/styled-system/jsx"
 import { tokenMap, Tokens } from "@/src/app/common/utils/helpers"
-import { css } from "@/styled-system/css"
 import { getPrice, getPriceUsd } from "../../common/functionCalls/getPrice"
 import { prettyBalance } from "../../common/utils/pretty"
 import { StacksMainnet } from "@stacks/network"
 import TokenSelector from "../token-selector"
+import InputValue from "./input-value"
 
 interface TargetComponentProps {
   targetToken: Tokens
@@ -17,6 +17,7 @@ interface TargetComponentProps {
   sourceValueUsd: number
   network: StacksMainnet
   setTargetToken: (token: Tokens) => void
+  estimatedDuration?: string
 }
 
 const TargetCard: React.FC<TargetComponentProps> = ({
@@ -28,7 +29,8 @@ const TargetCard: React.FC<TargetComponentProps> = ({
   network,
   targetPrice,
   setTargetPrice,
-  stxPrice
+  stxPrice,
+  estimatedDuration = "--"
 }) => {
   const [targetAmount, setTargetAmount] = useState(0)
 
@@ -71,7 +73,13 @@ const TargetCard: React.FC<TargetComponentProps> = ({
       borderColor={"grey"}
     >
       <VStack width="100%">
-        <Flex alignItems="center" width="100%">
+        <Flex
+          flexDirection={["column", "column", "row"]}
+          alignItems={["flex-start", "flex-start", "center"]}
+          width="100%"
+          gap={["0", "0", "1.5rem"]}
+          justifyContent="space-between"
+        >
           <Box m={"1rem"}>
             <TokenSelector
               options={targetTokens}
@@ -80,24 +88,10 @@ const TargetCard: React.FC<TargetComponentProps> = ({
               imagePath={tokenMap[targetToken].image}
             />
           </Box>
-          <input
+          <InputValue value={estimatedDuration} name="Estimated Duration" />
+          <InputValue
             value={prettyBalance(targetAmount, 0)}
-            readOnly={true}
-            placeholder="targetAmount"
-            name="target-amount"
-            type="text"
-            inputMode="decimal"
-            className={css({
-              marginRight: "0.5rem",
-              width: "50%",
-              padding: ["0", "0.5rem"],
-              color: "grey",
-              fontWeight: "light",
-              textAlign: "right",
-              bg: "transparent",
-              border: "none",
-              outline: "none"
-            })}
+            name="Total Amount"
           />
         </Flex>
       </VStack>
