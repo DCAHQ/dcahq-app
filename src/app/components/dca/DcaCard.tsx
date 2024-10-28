@@ -13,7 +13,8 @@ import {
   Tokens,
   targetTokens,
   tokenMap,
-  defaultFactor
+  defaultFactor,
+  estimateDuration
 } from "@/src/app/common/utils/helpers"
 import IntervalButton from "./interval-button"
 import CreateDcaButton from "./create-dca-button"
@@ -74,6 +75,8 @@ const DcaCard = () => {
     }
   }, [])
 
+  const frequency = Number(totalAmount) / Number(purchaseAmount)
+
   return (
     <Flex justifyContent="center">
       <Box
@@ -129,6 +132,14 @@ const DcaCard = () => {
             setTargetToken={setTargetToken}
             targetPrice={targetPrice}
             setTargetPrice={setTargetPrice}
+            estimatedDuration={
+              isNaN(frequency) || frequency == 0
+                ? "--"
+                : estimateDuration(
+                    selectedInterval,
+                    Math.ceil(Number(totalAmount) / Number(purchaseAmount))
+                  )
+            }
           />
           <Flex my={"1rem"}>
             <IntervalButton

@@ -50,6 +50,29 @@ export enum Intervals {
   weekly
 }
 
+export function estimateDuration(
+  interval: Intervals,
+  frequency: number
+): string {
+  const intervalHoursMap: Record<Intervals, number> = {
+    [Intervals.hours2]: 2,
+    [Intervals.hours6]: 6,
+    [Intervals.hours12]: 12,
+    [Intervals.daily]: 24,
+    [Intervals.weekly]: 168
+  }
+
+  const hoursPerInterval = intervalHoursMap[interval]
+  const totalHours = hoursPerInterval * frequency
+  if (totalHours < 168) {
+    const days = Math.ceil(totalHours / 24)
+    return `in ${days} day${days > 1 ? "s" : ""}`
+  } else {
+    const weeks = Math.ceil(totalHours / 168)
+    return `in ${weeks} week${weeks > 1 ? "s" : ""}`
+  }
+}
+
 export const intervalSeconds = {
   [Intervals.hours2]: 2 * 60 * 60,
   [Intervals.hours6]: 6 * 60 * 60,
