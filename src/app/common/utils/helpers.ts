@@ -3,11 +3,11 @@ export const maxJavascriptNumber = 9007199254740991
 export const defaultFactor = 100_000_000
 
 export const appName = "DCA HQ"
-const version = "-v2"
-export const contractDeployer = "SPNG8GDC6VW6SPAGE5M9ZCASPJWK65NDTH2E84HX"
+const version = "-v0-0"
+export const contractDeployer = "SP3SF2T474DXYEJ540GB27CZP3FG7FJ83X9RY4WF6"
 export const burnAddress = "SP000000000000000000002Q6VF78"
 export const authName = "auth" + version
-export const dcaManagerName = "dca-manager" + "-v3-0" //version
+export const dcaManagerName = "dca-manager" + version
 export const dcaVaultName = "dca-vault" + version
 export const defaultStrategyName = "default-strategy" + version
 export const strategyName = "strategy" + version
@@ -101,8 +101,8 @@ export enum Tokens {
 export const sourceTokens = [
   Tokens.STX,
   // alex
-  Tokens.ASTX,
-  Tokens.AUSDT,
+  // Tokens.ASTX,
+  // Tokens.AUSDT,
   // velar
   Tokens.VSTX,
   Tokens.VAEUSDC
@@ -111,8 +111,8 @@ export const sourceTokens = [
 export const targetTokens = [
   Tokens.STX,
   // alex
-  Tokens.ASTX,
-  Tokens.AWWELSH,
+  // Tokens.ASTX,
+  // Tokens.AWWELSH,
   // velar
   Tokens.VSTX,
   Tokens.VWELSH
@@ -143,7 +143,7 @@ export const welshContract =
 export const velarWelshDecimal = 6
 
 export const stxWrappers = [Tokens.ASTX, Tokens.VSTX]
-export const stxPlaceholderContract = "ddd.stx" as Contract
+export const stxPlaceholderContract = "placeholder.stx" as Contract
 
 export type Contract = `${string}.${string}`
 export type ValuePieChartData = {

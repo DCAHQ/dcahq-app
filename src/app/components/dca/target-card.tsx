@@ -6,22 +6,25 @@ import { prettyBalance } from "../../common/utils/pretty"
 import { StacksMainnet } from "@stacks/network"
 import TokenSelector from "../token-selector"
 import InputValue from "./input-value"
+import {
+  getStxWrapperFromTarget,
+  isStxOrStxWrapper
+} from "../../common/utils/filter-tokens"
 
 interface TargetComponentProps {
   targetToken: Tokens
   targetTokens: Tokens[]
-  sourceToken: Tokens
   stxPrice: number
   targetPrice: number
   setTargetPrice: (price: number) => void
   sourceValueUsd: number
   network: StacksMainnet
   setTargetToken: (token: Tokens) => void
+  setSourceToken: React.Dispatch<React.SetStateAction<Tokens>>
   estimatedDuration?: string
 }
 
 const TargetCard: React.FC<TargetComponentProps> = ({
-  sourceToken,
   targetToken,
   targetTokens,
   sourceValueUsd,
@@ -30,6 +33,7 @@ const TargetCard: React.FC<TargetComponentProps> = ({
   targetPrice,
   setTargetPrice,
   stxPrice,
+  setSourceToken,
   estimatedDuration = "--"
 }) => {
   const [targetAmount, setTargetAmount] = useState(0)
@@ -64,6 +68,14 @@ const TargetCard: React.FC<TargetComponentProps> = ({
     setTargetAmount(amount)
   }, [network, targetToken, sourceValueUsd, targetPrice])
 
+  useEffect(() => {
+    setSourceToken((prevSource: Tokens) =>
+      isStxOrStxWrapper(prevSource)
+        ? getStxWrapperFromTarget(targetToken)
+        : prevSource
+    )
+  }, [targetToken])
+
   return (
     <Box
       display="block"
@@ -85,7 +97,7 @@ const TargetCard: React.FC<TargetComponentProps> = ({
               options={targetTokens}
               selectedOption={targetToken}
               onSelect={setTargetToken}
-              imagePath={tokenMap[targetToken].image}
+              imagePath={tokenMap[targetToken]?.image ?? ""}
             />
           </Box>
           <InputValue value={estimatedDuration} name="Estimated Duration" />

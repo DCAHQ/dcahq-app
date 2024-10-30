@@ -123,15 +123,15 @@ const DcaCard = () => {
             </Flex>
           </Flex>
           <TargetCard
-            sourceToken={sourceToken}
+            targetToken={targetToken}
             targetTokens={targetTokensOptions}
             network={network}
             stxPrice={stxPrice}
             sourceValueUsd={sourceValueUsd}
-            targetToken={targetToken}
             setTargetToken={setTargetToken}
             targetPrice={targetPrice}
             setTargetPrice={setTargetPrice}
+            setSourceToken={setSourceToken}
             estimatedDuration={
               isNaN(frequency) || frequency == 0
                 ? "--"

@@ -17,8 +17,8 @@ import InputValue from "./input-value"
 import TokenSelector from "../token-selector"
 import { getPriceUsd } from "../../common/functionCalls/getPrice"
 import {
-  getAvailableSourceTokens,
-  getAvailableTargetTokens
+  getDisplayedSourceTokens,
+  getDisplayedTargetTokens
 } from "../../common/utils/filter-tokens"
 
 interface SourceComponentProps {
@@ -87,7 +87,7 @@ const SourceCard = ({
     }
 
     fetchBalance()
-    const newTargetTokens = getAvailableTargetTokens(targetTokens, sourceToken)
+    const newTargetTokens = getDisplayedTargetTokens(targetTokens, sourceToken)
     setTargetToken(newTargetTokens[0])
     setTargetTokens(newTargetTokens)
 
@@ -157,7 +157,7 @@ const SourceCard = ({
         >
           <Box m={["0.5rem", "1rem"]}>
             <TokenSelector
-              options={getAvailableSourceTokens(sourceTokens)}
+              options={getDisplayedSourceTokens(sourceTokens, sourceToken)}
               selectedOption={sourceToken}
               onSelect={setSourceToken}
               imagePath={sourceDetails.image}

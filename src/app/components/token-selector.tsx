@@ -51,8 +51,9 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
           {!!imagePath && (
             <Image src={imagePath} width={20} height={20} alt="token uri" />
           )}
+          {selectedOption}
 
-          {tokenMap[selectedOption].displayName}
+          {/* {tokenMap[selectedOption].displayName} */}
         </HStack>
         <DownChevron dimension="35px" color="white" />
       </Flex>
