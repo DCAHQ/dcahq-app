@@ -36,7 +36,7 @@ const DcaCard = () => {
   const [targetTokensOptions, setTargetTokensOptions] =
     useState<Tokens[]>(targetTokens)
   const [selectedInterval, setSelectedInterval] = useState<Intervals>(
-    Intervals.hours2
+    Intervals.hours12
   )
   const [network] = useState<StacksMainnet>(new StacksMainnet())
   const [targetPrice, setTargetPrice] = useState(0)

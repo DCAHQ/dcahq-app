@@ -14,19 +14,23 @@ const IntervalButton = ({
 }) => {
   const intervalDetails: { [key: string]: string } = {
     hours2: "automatic buy every 2 hours",
+    hours6: "automatic buy every 6 hours",
     hours12: "automatic buy every 12 hours",
     daily: "automatic buy every day",
     weekly: "automatic buy every week"
   }
   const displayDetails: { [key: string]: string } = {
     hours2: "2 hours",
+    hours6: "6 hours",
     hours12: "12 hours",
     daily: "Day",
     weekly: "Week"
   }
 
   const options: Intervals[] = [
-    Intervals.hours2,
+    // Intervals.hours2,
+    // Intervals.hours6,
+    Intervals.hours12,
     Intervals.daily,
     Intervals.weekly
   ]
