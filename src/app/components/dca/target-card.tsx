@@ -1,6 +1,10 @@
 import React, { memo, useEffect, useState } from "react"
 import { Box, Flex, VStack } from "@/styled-system/jsx"
-import { tokenMap, Tokens } from "@/src/app/common/utils/helpers"
+import {
+  getIsSourceNumerator,
+  tokenMap,
+  Tokens
+} from "@/src/app/common/utils/helpers"
 import { getPrice, getPriceUsd } from "../../common/functionCalls/getPrice"
 import { prettyBalance } from "../../common/utils/pretty"
 import { StacksMainnet } from "@stacks/network"
@@ -12,6 +16,7 @@ import {
 } from "../../common/utils/filter-tokens"
 
 interface TargetComponentProps {
+  sourceToken: Tokens
   targetToken: Tokens
   targetTokens: Tokens[]
   stxPrice: number
@@ -25,6 +30,7 @@ interface TargetComponentProps {
 }
 
 const TargetCard: React.FC<TargetComponentProps> = ({
+  sourceToken,
   targetToken,
   targetTokens,
   sourceValueUsd,
@@ -41,7 +47,7 @@ const TargetCard: React.FC<TargetComponentProps> = ({
   useEffect(() => {
     let active = true
     if (!stxPrice) return
-    const setAmount = async () => {
+    const setPriceAndAmount = async () => {
       const priceUsd = await getPriceUsd(targetToken, network, stxPrice)
       console.log("target-card getPriceUsd", {
         priceUsd,
@@ -50,23 +56,26 @@ const TargetCard: React.FC<TargetComponentProps> = ({
       })
       if (!active) return
       setTargetPrice(priceUsd)
+      const isSourceNumerator = getIsSourceNumerator(sourceToken, targetToken)
+      const amount = isSourceNumerator
+        ? sourceValueUsd * targetPrice
+        : sourceValueUsd / targetPrice
+      setTargetAmount(amount)
+
+      console.log("target-card setAmount", {
+        sourceValueUsd,
+        targetPriceUsd: targetPrice,
+        targetToken,
+        targetAmount: amount
+      })
     }
-    setAmount()
+    setPriceAndAmount()
     return () => {
       active = false
     }
-  }, [targetToken, stxPrice])
+  }, [stxPrice, network, targetToken, sourceValueUsd, targetPrice])
 
-  useEffect(() => {
-    const amount = sourceValueUsd / targetPrice
-    console.log("target-card setAmount", {
-      sourceValueUsd,
-      targetPriceUsd: targetPrice,
-      targetToken,
-      targetAmount: amount
-    })
-    setTargetAmount(amount)
-  }, [network, targetToken, sourceValueUsd, targetPrice])
+  useEffect(() => {}, [])
 
   useEffect(() => {
     setSourceToken((prevSource: Tokens) =>

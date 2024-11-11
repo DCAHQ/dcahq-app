@@ -164,7 +164,7 @@ export async function getPriceUsd(
   if (isStxOrStxWrapper(token)) return stxPrice
   const priceParams = getPriceParams(token, network)
   const tokenPriceInStx = await getPrice(priceParams)
-  const tokenPriceInUsd = tokenPriceInStx * stxPrice
+  const tokenPriceInUsd = tokenPriceInStx / stxPrice
   console.log("getPriceUsd", {
     tokenPriceInUsd,
     tokenPriceInStx,

@@ -79,6 +79,7 @@ export function estimateDuration(
   interval: Intervals,
   frequency: number
 ): string {
+  if (frequency == Infinity) return "--"
   const intervalHoursMap: Record<Intervals, number> = {
     [Intervals.hours2]: 2,
     [Intervals.hours6]: 6,
@@ -86,7 +87,6 @@ export function estimateDuration(
     [Intervals.daily]: 24,
     [Intervals.weekly]: 168
   }
-
   const hoursPerInterval = intervalHoursMap[interval]
   const totalHours = hoursPerInterval * frequency
   if (totalHours < 168) {
@@ -129,18 +129,18 @@ export const sourceTokens = [
   // Tokens.ASTX,
   // Tokens.AUSDT,
   // velar
-  // Tokens.VSTX,
+  Tokens.VSTX,
   Tokens.VAEUSDC
 ]
 
 export const targetTokens = [
-  Tokens.STX,
+  // Tokens.STX,
   // alex
   // Tokens.ASTX,
   // Tokens.AWWELSH,
   // velar
-  Tokens.VSTX
-  // Tokens.VWELSH
+  Tokens.VSTX,
+  Tokens.VWELSH
 ]
 
 export const alexWStxContract =
@@ -284,6 +284,18 @@ export const alexPairConfig: AlexPairCombinations = {
     [Tokens.AWWELSH]: { factor: defaultFactor, isSourceNumerator: false }
   }
 }
+
+export const getIsSourceNumerator = (source: Tokens, target: Tokens) => {
+  if (alexPairConfig[source]?.[target]?.isSourceNumerator !== undefined) {
+    return alexPairConfig[source][target].isSourceNumerator
+  } else if (
+    velarPairConfig[source]?.[target]?.isSourceNumerator !== undefined
+  ) {
+    return velarPairConfig[source][target].isSourceNumerator
+  } else {
+    return false // Default to false if not found in either config
+  }
+}
 export const velarPairConfig: VelarPairCombinations = {
   [Tokens.VSTX]: {
     [Tokens.VAEUSDC]: {
@@ -295,7 +307,7 @@ export const velarPairConfig: VelarPairCombinations = {
     [Tokens.VWELSH]: {
       poolId: 27,
       token0: Tokens.VSTX,
-      isSourceNumerator: false,
+      isSourceNumerator: true,
       isSourceToken0: true
     }
   },
