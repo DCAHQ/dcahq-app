@@ -3,6 +3,7 @@ import { ValuePieChartData } from "./utils/helpers"
 export function groupAndSumByToken(
   data: ValuePieChartData[]
 ): ValuePieChartData[] {
+  console.log({ groupAndSumByToken: { data } })
   const groupedData = data.reduce(
     (acc, { token, value, amount }) => {
       if (!acc[token]) {

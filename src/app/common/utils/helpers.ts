@@ -1,13 +1,30 @@
+import dotenv from "dotenv"
+dotenv.config()
+
+import {
+  createApiKeyMiddleware,
+  createFetchFn,
+  StacksMainnet
+} from "@stacks/network"
+
+const apiMiddleware = createApiKeyMiddleware({
+  apiKey: process.env.API_KEY ?? ""
+})
+
+// Create a custom fetch function using your API key
+const customFetchFn = createFetchFn(apiMiddleware)
+export const newStacksMainnet = new StacksMainnet({ fetchFn: customFetchFn })
+
 export const maxUint128 = BigInt("340282366920938463463374607431768211455")
 export const maxJavascriptNumber = 9007199254740991
 export const defaultFactor = 100_000_000
 
 export const appName = "DCA HQ"
 const version = "-v0-0"
-export const contractDeployer = "SP3SF2T474DXYEJ540GB27CZP3FG7FJ83X9RY4WF6"
+export const contractDeployer = "SP1HH99SPQJVWVTVD6E6V8XF5BDH30B4PGZ4SEXD"
 export const burnAddress = "SP000000000000000000002Q6VF78"
 export const authName = "auth" + version
-export const dcaManagerName = "dca-manager" + version
+export const dcaManagerName = "dca-manager" + "-v0-2"
 export const dcaVaultName = "dca-vault" + version
 export const defaultStrategyName = "default-strategy" + version
 export const strategyName = "strategy" + version
@@ -20,6 +37,14 @@ export const defaultStrategyContract =
 export const dcaUsersAlexFunction = "dca-users-a"
 
 export type UserKey = {
+  interval: number
+  strategy: string
+  source: string
+  target: string
+}
+
+export type DcaDataKey = {
+  user: string
   interval: number
   strategy: string
   source: string
@@ -104,7 +129,7 @@ export const sourceTokens = [
   // Tokens.ASTX,
   // Tokens.AUSDT,
   // velar
-  Tokens.VSTX,
+  // Tokens.VSTX,
   Tokens.VAEUSDC
 ]
 
@@ -114,8 +139,8 @@ export const targetTokens = [
   // Tokens.ASTX,
   // Tokens.AWWELSH,
   // velar
-  Tokens.VSTX,
-  Tokens.VWELSH
+  Tokens.VSTX
+  // Tokens.VWELSH
 ]
 
 export const alexWStxContract =

@@ -3,6 +3,14 @@ import { css } from "@/styled-system/css"
 import { HStack } from "@/styled-system/jsx"
 import { Intervals } from "../../common/utils/helpers"
 
+export const intervalOptions: Intervals[] = [
+  // Intervals.hours2,
+  // Intervals.hours6,
+  Intervals.hours12,
+  Intervals.daily,
+  Intervals.weekly
+]
+
 const IntervalButton = ({
   label,
   selectedInterval,
@@ -27,14 +35,6 @@ const IntervalButton = ({
     weekly: "Week"
   }
 
-  const options: Intervals[] = [
-    // Intervals.hours2,
-    // Intervals.hours6,
-    Intervals.hours12,
-    Intervals.daily,
-    Intervals.weekly
-  ]
-
   return (
     <div>
       {!!label && (
@@ -57,7 +57,7 @@ const IntervalButton = ({
         })}
       >
         <HStack>
-          {options.map((interval, index) => (
+          {intervalOptions.map((interval, index) => (
             <React.Fragment key={interval}>
               <button
                 className={css({

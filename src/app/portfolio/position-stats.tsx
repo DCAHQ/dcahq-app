@@ -43,18 +43,19 @@ const PositionStats = ({
   address,
   network,
   userKey,
+  dcaData,
   onDcaDataFetching
 }: {
   address: string
   network: StacksMainnet
   userKey: UserKey
+  dcaData: DcaData
   onDcaDataFetching?: (
     data: DcaData,
     sourceValue: number,
     targetValue: number
   ) => void
 }) => {
-  const [dcaData, setDcaData] = useState<DcaData | null>(null)
   const [isPaused, setIsPaused] = useState(false)
   const [relativePrice, setRelativePrice] = useState(0)
   const [minPrice, setMinPrice] = useState("")
@@ -73,17 +74,6 @@ const PositionStats = ({
   useEffect(() => {
     if (!userKey) return
     const fetchData = async () => {
-      const dcaData = await getDcaData(
-        address,
-        userKey.source,
-        userKey.target,
-        userKey.interval,
-        userKey.strategy,
-        network
-      )
-      if (!dcaData) return
-      setDcaData(dcaData)
-
       setIsPaused(dcaData.isPaused)
       setMinPrice(`${parseInt(dcaData.minPrice) / 10 ** sourceDetails.decimal}`)
       setMaxPrice(`${parseInt(dcaData.maxPrice) / 10 ** sourceDetails.decimal}`)
@@ -107,6 +97,8 @@ const PositionStats = ({
         console.log("position-stats", {
           source: userKey.source,
           target: userKey.target,
+          sourcePrice,
+          targetPrice,
           relativePrice,
           dcaData,
           issourcenumerator: isSourceANumerator(sourceToken, targetToken)
@@ -230,6 +222,9 @@ const PositionStats = ({
   // TODO one limitation of the contracts is that the dca positions are never deleted, the amount to trade just stays at zero.
   // 				so when a user wants to start another dca position for the same key, we need to detect that at the level of the create dca button and redirect them to the appropriate card here
 
+  const displayTime = Number(dcaData.lastUpdatedTimestamp)
+    ? Number(dcaData.lastUpdatedTimestamp)
+    : new Date().getTime()
   return (
     <Box
       borderWidth="1px"
@@ -295,11 +290,11 @@ const PositionStats = ({
           }
         />
         <LabelInput
-          input={`${prettyTimestamp((Number(dcaData.lastUpdatedTimestamp) + intervalSeconds[userKey.interval as Intervals]) * 1000)}`}
+          input={`${prettyTimestamp((displayTime + intervalSeconds[userKey.interval as Intervals]) * 1000)}`}
           label="Next Buy In"
         />
         <LabelInput
-          input={`${prettyTimestamp(Number(dcaData.lastUpdatedTimestamp) * 1000)}`}
+          input={`${prettyTimestamp(displayTime * 1000)}`}
           label="Last Buy Time"
         />
 
@@ -350,7 +345,6 @@ const PositionStats = ({
           />
         </HStack>
       </Grid>
-
       <HStack justifyContent={"flex-end"}>
         <Button
           onClick={async () => {

@@ -3,23 +3,35 @@
 import { HStack, VStack } from "@/styled-system/jsx"
 import React, { useEffect, useState } from "react"
 import { useUser } from "../contexts/UserProvider"
-import { StacksMainnet } from "@stacks/network"
+import {
+  createApiKeyMiddleware,
+  createFetchFn,
+  StacksMainnet
+} from "@stacks/network"
 import { getUserKeys } from "../common/functionCalls/getUserKeys"
-import { UserKey, ValuePieChartData } from "../common/utils/helpers"
+import {
+  DcaData,
+  newStacksMainnet,
+  UserKey,
+  ValuePieChartData
+} from "../common/utils/helpers"
 import NoPositionsFound from "./no-positions-found"
 import PositionStats from "./position-stats"
 import PieChart from "../components/charts/pie-chart"
 import { groupAndSumByToken } from "../common/groupBy"
 import PositionStatsContainer from "./position-stats-container"
+import { getUserDcaData } from "../common/functionCalls/getUserDcaData"
 
 const PortfolioStats = () => {
   const { userSession } = useUser()
   const [user, setUser] = useState<string>("")
-  const [userKeys, setUserKeys] = useState<UserKey[]>([])
-  const [network] = useState<StacksMainnet>(new StacksMainnet())
+  const [userDcaData, setUserDcaData] = useState<
+    { key: UserKey; dcaData: DcaData | undefined }[]
+  >([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [sourcesValues, setSourcesValues] = useState<ValuePieChartData[]>([])
   const [targetsValues, setTargetsValues] = useState<ValuePieChartData[]>([])
+  const [network] = useState<StacksMainnet>(newStacksMainnet)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,11 +43,11 @@ const PortfolioStats = () => {
       setUser(userData.profile.stxAddress.mainnet)
 
       try {
-        const keys = await getUserKeys(
+        const userDcaData = await getUserDcaData(
           userData.profile.stxAddress.mainnet,
           network
         )
-        setUserKeys(keys)
+        setUserDcaData(userDcaData.filter(d => d.dcaData))
       } catch (error) {
         console.error("Failed to fetch user keys:", error)
       } finally {
@@ -49,31 +61,35 @@ const PortfolioStats = () => {
   console.log({
     user,
     network,
-    userKeys,
+    userDcaData,
     sourcesValues,
     targetsValues
   })
   if (isLoading) return <div>Loading...</div> // todo use a loading spinner
-  if (!user || !userKeys?.length) return <NoPositionsFound />
+  if (!user || !userDcaData?.length) return <NoPositionsFound />
   return (
     <VStack>
-      {!!user && !!network && (
+      {!!user && !!network && !!userDcaData.length && (
         <HStack>
           <PieChart data={groupAndSumByToken(sourcesValues)} name="Source" />
           <PieChart data={groupAndSumByToken(targetsValues)} name="Target" />
         </HStack>
       )}
       <VStack>
-        {userKeys.map((userKey, index) => (
-          <PositionStatsContainer
-            key={index}
-            userKey={userKey}
-            address={user}
-            network={network}
-            setSourcesValues={setSourcesValues}
-            setTargetsValues={setTargetsValues}
-          />
-        ))}
+        {userDcaData.map((userDcaData, index) => {
+          if (!userDcaData.dcaData) return
+          return (
+            <PositionStatsContainer
+              key={index}
+              dcaData={userDcaData.dcaData}
+              userKey={userDcaData.key}
+              address={user}
+              network={network}
+              setSourcesValues={setSourcesValues}
+              setTargetsValues={setTargetsValues}
+            />
+          )
+        })}
       </VStack>
     </VStack>
   )

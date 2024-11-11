@@ -45,10 +45,12 @@ const PositionStatsContainer = ({
   userKey,
   network,
   address,
+  dcaData,
   setSourcesValues,
   setTargetsValues
 }: {
   userKey: UserKey
+  dcaData: DcaData
   address: string
   network: StacksMainnet
   setSourcesValues: React.Dispatch<React.SetStateAction<ValuePieChartData[]>>
@@ -103,6 +105,7 @@ const PositionStatsContainer = ({
   return (
     <PositionStats
       userKey={userKey}
+      dcaData={dcaData}
       address={address}
       network={network}
       onDcaDataFetching={onDcaDataFetching}

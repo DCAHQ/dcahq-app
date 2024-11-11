@@ -33,7 +33,7 @@ const Navbar = () => {
         <Flex gap={[0, 3]} ml={[1, 0]} alignItems="center">
           <Image
             className={css({ display: ["none", "block"] })}
-            src="/favicon.ico"
+            src="/logo-rm-bg.png"
             width={30}
             height={40}
             style={{ width: "auto" }}

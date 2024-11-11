@@ -16,9 +16,11 @@ export default function PieChart({ data, name }: PieChartProps) {
   const width = 250
   const half = width / 2
 
-  console.log({ piechartdata: data })
+  console.log("PieChart", { piechartdata: data })
 
   if (!data.length) return null
+  const totalAmount = data.reduce((acc, { amount }) => acc + Number(amount), 0)
+  if (!totalAmount) return
   return (
     <svg width={width} height={width}>
       <Group top={width / 2} left={width / 2}>
@@ -60,7 +62,7 @@ export default function PieChart({ data, name }: PieChartProps) {
               {data.length + ` ${name}` + (data.length == 1 ? "" : "s")}
             </Text>
             <Text textAnchor="middle" fill="#aaa" fontSize={20} dy={15}>
-              {`${prettyBalance(
+              {`Value: ${prettyBalance(
                 data.reduce((acc, d) => acc + d["value"], 0),
                 0
               )}Ӿ`}

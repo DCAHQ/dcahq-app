@@ -12,6 +12,7 @@ import {
   dcaManagerName,
   UserKey
 } from "../utils/helpers"
+import { principal, tuple, uint } from "@stacks/transactions/dist/cl"
 
 export async function getDcaData(
   user: string,
@@ -22,11 +23,13 @@ export async function getDcaData(
   network: StacksMainnet
 ): Promise<DcaData | undefined> {
   const functionArgs = [
-    principalCV(user),
-    principalCV(source),
-    principalCV(target),
-    uintCV(interval),
-    principalCV(strategy)
+    tuple({
+      user: principal(user),
+      source: principal(source),
+      target: principal(target),
+      interval: uint(interval),
+      strategy: principal(strategy)
+    })
   ]
   const options: ReadOnlyFunctionOptions = {
     contractAddress: contractDeployer,

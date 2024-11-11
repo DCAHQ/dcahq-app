@@ -30,13 +30,7 @@ export async function getPrice(params: {
     amtIn,
     isSourceNumerator
   })
-  const functionArgs = [
-    uintCV(poolId),
-    principalCV(tokenMap[token0].contract),
-    principalCV(tokenMap[tokenIn].contract),
-    uintCV(amtIn),
-    boolCV(isSourceNumerator)
-  ]
+  const functionArgs = [uintCV(poolId), boolCV(true)]
 
   const options: ReadOnlyFunctionOptions = {
     contractAddress: contractDeployer,
@@ -48,14 +42,15 @@ export async function getPrice(params: {
   }
 
   const response = await callReadOnlyFunction(options)
-  console.log("velar get-price-b getprice", {
+  console.log("velar get-price-b", {
     velarprice: response,
     token0,
     tokenIn,
     amtIn,
     isSourceNumerator,
-    poolId
+    poolId,
+    returned: cvToValue(response)
   })
   // prices are welsh/stx
-  return 1 / (cvToValue(response).value / 10 ** tokenMap[tokenIn].decimal)
+  return Number(cvToValue(response)) / 10 ** tokenMap[tokenIn].decimal
 }
